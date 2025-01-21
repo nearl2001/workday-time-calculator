@@ -1,0 +1,22 @@
+h1 {
+    text-align: center;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
+    background: linear-gradient(to top, rgba(30, 180, 230, 1), rgba(9, 90, 190, 1));
+    color: white;
+}
+
+#timetarget {
+    margin: 0 10px 20px 10px;
+}
+
+#result {
+    font-size: large;
+    text-align: center;
+}
