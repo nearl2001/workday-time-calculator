@@ -4,7 +4,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         const currentHours = getCurrentHours()
         const clockIn = getClockIn()
         const targetHours = message.timetarget
-        console.log(currentHours)
 
         if (currentHours != null) {
             const result = calculate(currentHours, targetHours, clockIn)
@@ -16,8 +15,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
   
 function getTimeWorkedSoFar() {
-    const elements = document.getElementsByClassName("WMTM")
-    return elements[0] ? elements[0].innerText : null
+    let elements = document.getElementsByClassName("WMTM")
+    if (elements[0] != null && elements[0].innerText != '') {
+        return elements[0].innerText
+    } else {
+        elements = document.getElementsByClassName("WNTM")
+        return elements[0] ? elements[0].innerText : null
+    }
+    
 }
 
 function getTimeClockedIn() {
@@ -28,17 +33,16 @@ function getTimeClockedIn() {
 // Gather the target number from a string
 function getCurrentHours() {
     const text = getTimeWorkedSoFar()
-    console.log(text)
+    if (text == null || text == '') {
+        return null
+    }
     const numString = text.substring(11, text.length - 7)
-    console.log(numString)
     return Number(numString)
 }
 
 function getClockIn() {
     const text = getTimeClockedIn()
-    console.log(text)
     const numString = text.substring(14, text.length - 3)
-    console.log(numString)
     const numsSplit = numString.split(':')
     let timestamp = Number(numsSplit[0])
     timestamp += (Number(numsSplit[1]) / 60)
@@ -52,14 +56,13 @@ function sendNumToString(inputNum) {
 
 function calculateClockOutTime(clockIn, timeRemaining) {
     const clockOutTime = clockIn + timeRemaining
-    console.log('clock out time is ' + clockOutTime)
 
     const secondsRemaining = Math.round(clockOutTime * 3600)
     const hours = Math.floor(clockOutTime)
     const minutes = Math.floor((secondsRemaining % 3600) / 60)
     const seconds = secondsRemaining % 60
 
-    return `${sendNumToString(hours)}:${sendNumToString(minutes)}:${sendNumToString(seconds)}`
+    return `${hours}:${sendNumToString(minutes)}:${sendNumToString(seconds)}`
 }
 
 function calculateTimeRemaining(remainingTime) {
@@ -68,7 +71,7 @@ function calculateTimeRemaining(remainingTime) {
     const minutes = Math.floor((secondsRemaining % 3600) / 60)
     const seconds = secondsRemaining % 60
 
-    return `${sendNumToString(hours)}:${sendNumToString(minutes)}:${sendNumToString(seconds)}`
+    return `${hours}:${sendNumToString(minutes)}:${sendNumToString(seconds)}`
 }
   
 // Perform calculations
