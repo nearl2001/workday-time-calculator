@@ -8,6 +8,10 @@ document.getElementById("timetarget").addEventListener("keydown", async (event) 
     }
 })
 
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('timetarget').focus()
+})
+
 const runProcess = () => {
     let timetarget = document.getElementById("timetarget").value
 
